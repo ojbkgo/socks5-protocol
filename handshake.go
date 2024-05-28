@@ -44,6 +44,13 @@ func (req *HandshakeReq) ReadIO(reader io.Reader) error {
 	return nil
 }
 
+// WriteIO write to io.Writer
+func (req *HandshakeReq) WriteIO(writer io.Writer) error {
+	data := req.Serialize()
+	_, err := writer.Write(data)
+	return err
+}
+
 type HandshakeResp struct {
 	Ver    Socks5Version
 	Method Socks5Method
@@ -68,4 +75,11 @@ func (resp *HandshakeResp) ReadIO(reader io.Reader) error {
 	resp.UnSerialize(header)
 
 	return nil
+}
+
+// WriteIO write to io.Writer
+func (resp *HandshakeResp) WriteIO(writer io.Writer) error {
+	data := resp.Serialize()
+	_, err := writer.Write(data)
+	return err
 }

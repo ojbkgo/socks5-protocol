@@ -92,6 +92,13 @@ func (req *Socks5CmdRequest) ReadIO(reader io.Reader) error {
 	return nil
 }
 
+// WriteIO write to io.Writer
+func (req *Socks5CmdRequest) WriteIO(writer io.Writer) error {
+	data := req.Serialize()
+	_, err := writer.Write(data)
+	return err
+}
+
 type Socks5CmdConnectResponse struct {
 	Ver  Socks5Version
 	Rep  Socks5Rep
@@ -178,4 +185,11 @@ func (resp *Socks5CmdConnectResponse) ReadIO(reader io.Reader) error {
 
 	resp.UnSerialize(header)
 	return nil
+}
+
+// WriteIO write to io.Writer
+func (resp *Socks5CmdConnectResponse) WriteIO(writer io.Writer) error {
+	data := resp.Serialize()
+	_, err := writer.Write(data)
+	return err
 }

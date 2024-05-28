@@ -102,3 +102,10 @@ func (req *Socks5UdpPackage) ReadIO(reader io.Reader) error {
 	req.UnSerialize(header)
 	return nil
 }
+
+// WriteIO write to io.Writer
+func (req *Socks5UdpPackage) WriteIO(writer io.Writer) error {
+	data := req.Serialize()
+	_, err := writer.Write(data)
+	return err
+}

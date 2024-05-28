@@ -51,7 +51,41 @@ func (req *AuthUserPasswordReq) ReadIO(reader io.Reader) error {
 	return nil
 }
 
+// WriteIO write to io.Writer
+func (req *AuthUserPasswordReq) WriteIO(writer io.Writer) error {
+	data := req.Serialize()
+	_, err := writer.Write(data)
+	return err
+}
+
 type AuthUserPasswordResp struct {
 	Ver    Socks5Version
 	Status byte
+}
+
+func (resp *AuthUserPasswordResp) Serialize() []byte {
+	return []byte{byte(resp.Ver), resp.Status}
+}
+
+func (resp *AuthUserPasswordResp) UnSerialize(data []byte) {
+	resp.Ver = Socks5Version(data[0])
+	resp.Status = data[1]
+}
+
+func (resp *AuthUserPasswordResp) ReadIO(reader io.Reader) error {
+	header := make([]byte, 2)
+	_, err := reader.Read(header)
+	if err != nil {
+		return err
+	}
+
+	resp.UnSerialize(header)
+	return nil
+}
+
+// WriteIO write to io.Writer
+func (resp *AuthUserPasswordResp) WriteIO(writer io.Writer) error {
+	data := resp.Serialize()
+	_, err := writer.Write(data)
+	return err
 }
