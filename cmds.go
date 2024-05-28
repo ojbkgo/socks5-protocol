@@ -99,7 +99,7 @@ func (req *Socks5CmdRequest) WriteIO(writer io.Writer) error {
 	return err
 }
 
-type Socks5CmdConnectResponse struct {
+type Socks5CmdResponse struct {
 	Ver  Socks5Version
 	Rep  Socks5Rep
 	Rsv  byte
@@ -107,7 +107,7 @@ type Socks5CmdConnectResponse struct {
 	Addr Socks5Addr
 }
 
-func (resp *Socks5CmdConnectResponse) Serialize() []byte {
+func (resp *Socks5CmdResponse) Serialize() []byte {
 	data := []byte{
 		byte(resp.Ver),
 		byte(resp.Rep),
@@ -130,7 +130,7 @@ func (resp *Socks5CmdConnectResponse) Serialize() []byte {
 	return data
 }
 
-func (resp *Socks5CmdConnectResponse) UnSerialize(data []byte) {
+func (resp *Socks5CmdResponse) UnSerialize(data []byte) {
 	resp.Ver = Socks5Version(data[0])
 	resp.Rep = Socks5Rep(data[1])
 	resp.Rsv = data[2]
@@ -149,7 +149,7 @@ func (resp *Socks5CmdConnectResponse) UnSerialize(data []byte) {
 	}
 }
 
-func (resp *Socks5CmdConnectResponse) ReadIO(reader io.Reader) error {
+func (resp *Socks5CmdResponse) ReadIO(reader io.Reader) error {
 	// 根据类型读取
 	header := make([]byte, 4)
 	_, err := reader.Read(header)
@@ -188,7 +188,7 @@ func (resp *Socks5CmdConnectResponse) ReadIO(reader io.Reader) error {
 }
 
 // WriteIO write to io.Writer
-func (resp *Socks5CmdConnectResponse) WriteIO(writer io.Writer) error {
+func (resp *Socks5CmdResponse) WriteIO(writer io.Writer) error {
 	data := resp.Serialize()
 	_, err := writer.Write(data)
 	return err
